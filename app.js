@@ -8,6 +8,7 @@ var cors = require('cors');
 
 var index = require('./routes/index');
 var user = require('./routes/user');
+var auth = require('./auth');
 
 var app = express();
 
@@ -24,6 +25,7 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(cors());
 
+app.use('/auth', auth);
 app.use('/', index);
 app.use('/user', user);
 
