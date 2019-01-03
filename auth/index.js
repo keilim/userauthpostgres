@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 
+const User = require('../db/user');
 //Route paths are prepended with /auth
 
 router.get('/', (req, res) => {
@@ -23,11 +24,18 @@ router.post('/signup', (req, res, next) => {
 		User
 		    .getOneByEmail(req.body.email)
 		    .then(user => {
-			console.log('user', user);
-			res.json({
-				user,
-				message: 'return'
-			});
+				console.log('user', user);
+				//if user not found
+				if (!user) {
+					//this is a unique email
+					res.json({
+						user,
+						message: 'return'
+					});
+				} else {
+					//email in use
+					next(new Error('Email in use'));
+				}
 		    });
 	} else  {
 		next(new Error('Invalid user'));
